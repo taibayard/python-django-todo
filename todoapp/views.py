@@ -1,16 +1,20 @@
 from django.contrib.auth.models import User
 from django.contrib import auth
-
 from django.shortcuts import render, redirect
 from .models import Todo
 
 # Create your views here.
 def index(request):
-    context = {
-        "todos": Todo.objects.all()
-    }
-    print("user:", request.user.username)
-    return render(request, 'todoapp/index.html', context)
+    if request.method == "GET":
+        context = {
+            "todos": Todo.objects.all()
+        }
+        return render(request, 'todoapp/index.html', context)
+    elif request.method == "POST":
+        new_todo = Todo()
+        new_todo.text = request.POST["text"]
+        new_todo.save()
+        return redirect('index')
     
 def signup(request):
     context = {"error": False}
