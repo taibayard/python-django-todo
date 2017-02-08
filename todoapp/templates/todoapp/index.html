@@ -4,6 +4,15 @@
 <h1>Home Page</h1>
 <form action="/" method="POST">
   {% csrf_token %}
+  <div>
+    <select name="userid">
+      {% for user in users %}
+        <option name="userid" value="{{user.id}}">
+          {{user.username}}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
   <input type="text" name="text" placeholder="Enter Todo">
   <input type="submit">
 </form>

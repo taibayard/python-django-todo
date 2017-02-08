@@ -7,10 +7,13 @@ from .models import Todo
 def index(request):
     if request.method == "GET":
         context = {
-            "todos": Todo.objects.all()
+            "todos": Todo.objects.all(),
+            "users": User.objects.all()
         }
         return render(request, 'todoapp/index.html', context)
     elif request.method == "POST":
+        userid = request.POST["userid"]
+        
         new_todo = Todo()
         new_todo.text = request.POST["text"]
         new_todo.save()
