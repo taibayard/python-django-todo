@@ -1,20 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
-from .models import Todo
+from .models import Todo, Tag
 
 # Create your views here.
 def index(request):
     if request.method == "GET":
         context = {
-            "todos": Todo.objects.all()
+            "todos": Todo.objects.filter(user_id=request.user).select_related()
         }
         return render(request, 'todoapp/index.html', context)
     elif request.method == "POST":
-        new_todo = Todo()
-        new_todo.text = request.POST["text"]
-        new_todo.save()
-        return redirect('index')
+        if request.user.is_authenticated:
+            new_todo = Todo()
+            new_todo.text = request.POST["text"]
+            tag, created = Tag.objects.get_or_create(name=request.POST["tag"])
+            new_todo.user_id = request.user.id
+            new_todo.save()
+            new_todo.tags.add(tag)
+            return redirect('index')
+        else:
+            return redirect('/login')
 
 def signup(request):
     context = {"error": False}

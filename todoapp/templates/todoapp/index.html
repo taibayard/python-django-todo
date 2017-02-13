@@ -5,11 +5,17 @@
 <form action="/" method="POST">
   {% csrf_token %}
   <input type="text" name="text" placeholder="Enter Todo">
+  <input type="text" name="tag" placeholder="Enter tag">
   <input type="submit">
 </form>
 <ul>
   {% for todo in todos %}
-    <li>{{todo.text}}</li>
+    <li>
+      {{todo.text}}
+      {% for tag in todo.tags.all %}
+        <span class="badge">{{tag.name}}</span>
+      {% endfor %}
+    </li>
   {% endfor %}
 </ul>
 {% endblock %}
