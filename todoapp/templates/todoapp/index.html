@@ -1,6 +1,30 @@
 {% extends 'todoapp/base.html' %}
 
 {% block content%}
-<h1>Home Page</h1>
-
+<h1>
+    {% if user.is_authenticated%}
+        {{user.username}}'s Todo List
+    {% else %}
+        Hello Anonymous Todo List User!
+    {%endif%}
+</h1>
+{%if error%}
+    <p class="text-danger">{{error}}</p>
+{%endif%}
+<div class="row">
+    <div class="col-xs-6">
+        <form action="/" method="POST">
+            {% csrf_token %}
+            <select name="userid" class="form-control">
+                {% for u in users %}
+                    <option value="{{u.id}}">
+                        {{ u.username }}
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="text" name="text" placeholder="What you gotta do?">
+            <input type="submit" value="Add Todo" class="btn btn-info">
+        </form>
+    </div>
+</div>
 {% endblock %}
