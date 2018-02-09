@@ -11,6 +11,12 @@
 {%if error%}
     <p class="text-danger">{{error}}</p>
 {%endif%}
+
+{% if quote %}
+    <h2>Fun quote time!</h2>
+    <em>{% autoescape off %} {{quote.content}} {% endautoescape %}</em>
+    - {{quote.title}}
+{% endif %}
 <div class="row">
     <div class="col-xs-6">
         <form action="/" method="POST">
@@ -25,6 +31,34 @@
             <input type="text" name="text" placeholder="What you gotta do?">
             <input type="submit" value="Add Todo" class="btn btn-info">
         </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+        <h2>The List of Doing</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Item</th>
+                <th>Name</th>
+                <th>Done?</th>
+                <th>Remove?</th>
+            </tr>
+            {% for t in todos %}
+                <tr>
+                    <td>{{t.text}}</td>
+                    <td>{{t.user}}</td>
+                    <td>{% if t.is_complete %}
+                            <i class="glyphicon glyphicon-ok"></i>
+                        {% else %}
+                            <a href="{{t.id}}/done">Mark Done</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{t.id}}/delete/">Remove</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 </div>
 {% endblock %}
